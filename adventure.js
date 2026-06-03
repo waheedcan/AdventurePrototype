@@ -215,6 +215,57 @@ class AdventureScene extends Phaser.Scene {
     }
 
     /**
+     * Attach a hover message to an existing game object.
+     * 
+     * @param {Phaser.GameObjects.GameObject} obj The game object to add hover text to.
+     * @param {string} message The text to show on hover.
+     * @returns {Phaser.GameObjects.GameObject} The object for chaining.
+     */
+    describe(obj, message) {
+        obj.setInteractive()
+            .on('pointerover', () => this.showMessage(message));
+        return obj;
+    }
+
+    /**
+     * Shake/jiggle an object back and forth.
+     * 
+     * @param {Phaser.GameObjects.GameObject} target The object to shake.
+     * @param {number} distance How far to shake (default: this.s).
+     * @param {number} duration How long to shake in ms (default: 100).
+     */
+    shake(target, distance = this.s, duration = 100) {
+        this.tweens.add({
+            targets: target,
+            x: '+=' + distance,
+            repeat: 2,
+            yoyo: true,
+            ease: 'Sine.inOut',
+            duration: duration
+        });
+    }
+
+    /**
+     * Create and place an interactive item in the scene.
+     * 
+     * @param {string} emoji The emoji/icon for the item.
+     * @param {string} name The name of the item.
+     * @param {number} x The x position.
+     * @param {number} y The y position.
+     * @param {string} hoverText The text to show on hover.
+     * @param {Function} clickCallback Function to call when clicked (receives the item text object).
+     * @returns {Phaser.GameObjects.Text} The item text object.
+     */
+    placeItem(emoji, name, x, y, hoverText, clickCallback) {
+        let item = this.add.text(x, y, `${emoji} ${name}`)
+            .setFontSize(this.s * 2)
+            .setInteractive()
+            .on('pointerover', () => this.showMessage(hoverText))
+            .on('pointerdown', () => clickCallback(item));
+        return item;
+    }
+
+    /**
      * Subclass hook: called at the end of {@link AdventureScene#create}, after
      * the message box and inventory panel exist. Override this in your scene
      * to add your location's interactive objects.
