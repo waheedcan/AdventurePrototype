@@ -1,4 +1,4 @@
-A simple adventure game by Gouse based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
+A simple adventure game by Waheed based on a simple adventure game engine by [Adam Smith](https://github.com/rndmcnlly).
 
 Code requirements:
 - **4+ scenes based on `AdventureScene`**: `VillageSquare`, `DarkForest`, `DungeonEntrance`, `DungeonChamber`, and `CurseAltar`.
