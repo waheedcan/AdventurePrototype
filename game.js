@@ -194,12 +194,22 @@ class CurseAltar extends AdventureScene {
         let wardStone = this.describe(this.add.text(this.w * 0.1, this.h * 0.60, "ward stone")
             .setFontSize(this.s * 1.5), "A cracked ward stone hums against the altar's curse.")
             .on('pointerdown', () => {
+                if (!this.hasItem('BLESSING')) {
+                    this.shake(wardStone);
+                    this.showMessage("The ward stone rejects your touch. Find a blessing first.");
+                    return;
+                }
                 this.showMessage("The stone grows warmer near your blessing, but it cannot hold the curse alone.");
             });
 
         let ritualBook = this.describe(this.add.text(this.w * 0.1, this.h * 0.73, "ritual book")
             .setFontSize(this.s * 1.5), "The open book describes the altar's old ritual.")
             .on('pointerdown', () => {
+                if (!this.hasItem('BLESSING')) {
+                    this.shake(ritualBook);
+                    this.showMessage("The ritual text blurs before you. You need the herb altar's blessing.");
+                    return;
+                }
                 this.showMessage("The ritual requires courage, a blessing, and one steady hand.");
             });
     }
@@ -302,4 +312,3 @@ const game = new Phaser.Game({
     scene: [Intro, VillageSquare, DarkForest, DungeonEntrance, DungeonChamber, CurseAltar, GoodEnding, BadEnding, Outro],
     title: "Adventure Game",
 });
-
