@@ -47,13 +47,23 @@ class VillageSquare extends AdventureScene {
             .setFontSize(this.s * 1.5)
             .setWordWrapWidth(this.w * 0.6);
 
-        let forest = this.add.text(this.w * 0.1, this.h * 0.45, "🌲 dark forest path")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("A path into the dark forest..."))
+        let forest = this.describe(this.add.text(this.w * 0.1, this.h * 0.45, "🌲 dark forest path")
+            .setFontSize(this.s * 2), "A path into the dark forest...")
             .on('pointerdown', () => {
                 this.showMessage("You venture into the forest...");
                 this.gotoScene('DarkForest');
+            });
+
+        let noticeBoard = this.describe(this.add.text(this.w * 0.1, this.h * 0.60, "notice board")
+            .setFontSize(this.s * 1.5), "A faded notice warns travelers about the cursed altar.")
+            .on('pointerdown', () => {
+                this.showMessage("The board says: Seek a blessing before touching the gem.");
+            });
+
+        let hermit = this.describe(this.add.text(this.w * 0.1, this.h * 0.73, "old hermit")
+            .setFontSize(this.s * 1.5), "The hermit watches the road with worried eyes.")
+            .on('pointerdown', () => {
+                this.showMessage("The hermit whispers: The herbs below still remember old protections.");
             });
     }
 }
@@ -72,19 +82,15 @@ class DarkForest extends AdventureScene {
             .setFontSize(this.s * 1.5)
             .setWordWrapWidth(this.w * 0.6);
 
-        let forward = this.add.text(this.w * 0.1, this.h * 0.45, "🏛️ stone structure")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("The entrance to an ancient dungeon."))
+        let forward = this.describe(this.add.text(this.w * 0.1, this.h * 0.45, "🏛️ stone structure")
+            .setFontSize(this.s * 2), "The entrance to an ancient dungeon.")
             .on('pointerdown', () => {
                 this.showMessage("You approach the dungeon entrance...");
                 this.gotoScene('DungeonEntrance');
             });
 
-        let back = this.add.text(this.w * 0.1, this.h * 0.60, "↩️ return to village")
-            .setFontSize(this.s * 1.5)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Go back to the village."))
+        let back = this.describe(this.add.text(this.w * 0.1, this.h * 0.60, "↩️ return to village")
+            .setFontSize(this.s * 1.5), "Go back to the village.")
             .on('pointerdown', () => this.gotoScene('VillageSquare'));
     }
 }
@@ -103,19 +109,15 @@ class DungeonEntrance extends AdventureScene {
             .setFontSize(this.s * 1.5)
             .setWordWrapWidth(this.w * 0.6);
 
-        let deeper = this.add.text(this.w * 0.1, this.h * 0.45, "🔦 descent into darkness")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Venture deeper into the dungeon."))
+        let deeper = this.describe(this.add.text(this.w * 0.1, this.h * 0.45, "🔦 descent into darkness")
+            .setFontSize(this.s * 2), "Venture deeper into the dungeon.")
             .on('pointerdown', () => {
                 this.showMessage("You descend into the depths...");
                 this.gotoScene('DungeonChamber');
             });
 
-        let back = this.add.text(this.w * 0.1, this.h * 0.60, "↩️ return to forest")
-            .setFontSize(this.s * 1.5)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("Go back to the forest."))
+        let back = this.describe(this.add.text(this.w * 0.1, this.h * 0.60, "↩️ return to forest")
+            .setFontSize(this.s * 1.5), "Go back to the forest.")
             .on('pointerdown', () => this.gotoScene('DarkForest'));
     }
 }
@@ -134,11 +136,13 @@ class DungeonChamber extends AdventureScene {
             .setFontSize(this.s * 1.5)
             .setWordWrapWidth(this.w * 0.6);
 
-        let blessing = this.add.text(this.w * 0.1, this.h * 0.45, "✨ herb altar")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("A sacred altar radiates protective light."))
+        let blessing = this.describe(this.add.text(this.w * 0.1, this.h * 0.45, "✨ herb altar")
+            .setFontSize(this.s * 2), "A sacred altar radiates protective light.")
             .on('pointerdown', () => {
+                if (this.hasItem('BLESSING')) {
+                    this.showMessage("The altar is quiet now. Its blessing already protects you.");
+                    return;
+                }
                 this.showMessage("You receive a blessing from the ancient herbs!");
                 this.gainItem('BLESSING');
                 this.tweens.add({
@@ -150,10 +154,8 @@ class DungeonChamber extends AdventureScene {
                 });
             });
 
-        let proceed = this.add.text(this.w * 0.1, this.h * 0.65, "🚪 path to curse altar")
-            .setFontSize(this.s * 1.5)
-            .setInteractive()
-            .on('pointerover', () => this.showMessage("A passage deeper underground..."))
+        let proceed = this.describe(this.add.text(this.w * 0.1, this.h * 0.65, "🚪 path to curse altar")
+            .setFontSize(this.s * 1.5), "A passage deeper underground...")
             .on('pointerdown', () => {
                 this.showMessage("You press onward toward your destiny...");
                 this.gotoScene('CurseAltar');
@@ -175,16 +177,10 @@ class CurseAltar extends AdventureScene {
             .setFontSize(this.s * 1.5)
             .setWordWrapWidth(this.w * 0.6);
 
-        let gem = this.add.text(this.w * 0.1, this.h * 0.45, "💎 cursed gem")
-            .setFontSize(this.s * 2)
-            .setInteractive()
-            .on('pointerover', () => {
-                if (this.hasItem('BLESSING')) {
-                    this.showMessage("The gem glows with purified light. The curse seems contained.");
-                } else {
-                    this.showMessage("The gem pulses with dark energy. Taking it feels very dangerous...");
-                }
-            })
+        let gem = this.describe(this.add.text(this.w * 0.1, this.h * 0.45, "💎 cursed gem")
+            .setFontSize(this.s * 2), this.hasItem('BLESSING')
+                ? "The gem glows with purified light. The curse seems contained."
+                : "The gem pulses with dark energy. Taking it feels very dangerous...")
             .on('pointerdown', () => {
                 if (this.hasItem('BLESSING')) {
                     this.showMessage("With the blessing's protection, you claim the gem safely!");
@@ -193,6 +189,18 @@ class CurseAltar extends AdventureScene {
                     this.showMessage("The curse overwhelms you as you touch the gem!");
                     this.gotoScene('BadEnding');
                 }
+            });
+
+        let wardStone = this.describe(this.add.text(this.w * 0.1, this.h * 0.60, "ward stone")
+            .setFontSize(this.s * 1.5), "A cracked ward stone hums against the altar's curse.")
+            .on('pointerdown', () => {
+                this.showMessage("The stone grows warmer near your blessing, but it cannot hold the curse alone.");
+            });
+
+        let ritualBook = this.describe(this.add.text(this.w * 0.1, this.h * 0.73, "ritual book")
+            .setFontSize(this.s * 1.5), "The open book describes the altar's old ritual.")
+            .on('pointerdown', () => {
+                this.showMessage("The ritual requires courage, a blessing, and one steady hand.");
             });
     }
 }
